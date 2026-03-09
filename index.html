@@ -6,1019 +6,549 @@
 <title>Panoptyc Dining ROI Calculator</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ── HARD RESET scoped to widget ── */
-#pan-roi, #pan-roi *, #pan-roi *::before, #pan-roi *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font: inherit;
-  vertical-align: baseline;
-}
-
-#pan-roi {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  background: #0b0f1a;
-  color: #fff;
-  border-radius: 20px;
-  overflow: hidden;
-  max-width: 1200px;
-  margin: 0 auto;
-  -webkit-font-smoothing: antialiased;
+#pan,#pan *,#pan *::before,#pan *::after{box-sizing:border-box;margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
+#pan{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:14px;line-height:1.5;
+  background:#ffffff;
+  color:#1a1a2e;
+  border-radius:20px;
+  overflow:hidden;
+  max-width:940px;
+  margin:0 auto;
+  -webkit-font-smoothing:antialiased;
+  box-shadow:0 4px 40px rgba(0,0,0,.08);
+  border:1px solid rgba(0,0,0,.07)!important;
 }
 
 /* ── HEADER ── */
-#pan-roi .p-header {
-  background: linear-gradient(135deg, #0b0f1a 0%, #111827 100%);
-  padding: 36px 40px 28px;
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  position: relative;
-  overflow: hidden;
+#pan .hd{
+  padding:38px 44px 32px;
+  background:#fff;
+  border-bottom:1px solid #f0f0f0;
+  position:relative;overflow:hidden;
 }
-#pan-roi .p-header::before {
-  content: '';
-  position: absolute;
-  top: -80px; right: -80px;
-  width: 280px; height: 280px;
-  background: radial-gradient(circle, rgba(220,53,34,.16) 0%, transparent 70%);
-  pointer-events: none;
+/* decorative squares matching panoptyc.com background */
+#pan .hd::before{
+  content:'';position:absolute;
+  width:90px;height:90px;top:-20px;right:60px;
+  background:rgba(220,53,34,.07);border-radius:8px;
+  transform:rotate(12deg);pointer-events:none;
 }
-#pan-roi .p-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: rgba(220,53,34,.12);
-  border: 1px solid rgba(220,53,34,.3);
-  color: #ff6b52;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  padding: 5px 12px;
-  border-radius: 100px;
-  margin-bottom: 12px;
+#pan .hd::after{
+  content:'';position:absolute;
+  width:55px;height:55px;top:30px;right:20px;
+  background:rgba(220,53,34,.05);border-radius:6px;
+  transform:rotate(-8deg);pointer-events:none;
 }
-#pan-roi .p-badge::before {
-  content: '';
-  width: 6px; height: 6px;
-  background: #dc3522;
-  border-radius: 50%;
-  animation: ppulse 2s infinite;
+#pan .hd-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(220,53,34,.08);border:1px solid rgba(220,53,34,.2);
+  color:#dc3522;font-size:11px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;padding:5px 13px;border-radius:100px;margin-bottom:13px;
 }
-@keyframes ppulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50%      { opacity:.4; transform:scale(.7); }
+#pan .hd-badge::before{
+  content:'';width:6px;height:6px;background:#dc3522;border-radius:50%;
+  animation:pblink 2s infinite;
 }
-#pan-roi .p-header h1 {
-  font-size: clamp(20px, 3.5vw, 28px);
-  font-weight: 800;
-  color: #fff;
-  line-height: 1.2;
-  margin-bottom: 8px;
-}
-#pan-roi .p-header h1 span { color: #dc3522; }
-#pan-roi .p-header p {
-  font-size: 14px;
-  color: rgba(255,255,255,.45);
-  max-width: 500px;
-  line-height: 1.6;
+@keyframes pblink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+#pan .hd h1{font-size:clamp(20px,3.2vw,28px);font-weight:800;line-height:1.2;margin-bottom:7px;color:#111827}
+#pan .hd h1 em{color:#dc3522;font-style:normal}
+#pan .hd p{font-size:13px;color:#6b7280;max-width:440px;line-height:1.65}
+
+/* ── MAIN 2-COL ── */
+#pan .main{display:grid;grid-template-columns:1fr 1fr;align-items:start}
+
+/* ── INPUTS (LEFT) ── */
+#pan .inp{
+  padding:32px 36px 36px;
+  border-right:1px solid #f0f0f0;
+  background:#fff;
 }
 
-/* ── BODY ── */
-#pan-roi .p-body {
-  padding: 32px 40px 40px;
-  background: #0e1320;
+/* section heading */
+#pan .sh{
+  font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:#9ca3af;margin-bottom:18px;
+  display:flex;align-items:center;gap:9px;
 }
+#pan .sh::after{content:'';flex:1;height:1px;background:#f0f0f0}
 
-/* ── SECTION LABEL ── */
-#pan-roi .p-slabel {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.28);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-#pan-roi .p-slabel::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255,255,255,.06);
-}
+/* field */
+#pan .f{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+#pan .f:last-child{margin-bottom:0}
+#pan .fl{font-size:12px;font-weight:600;color:#6b7280;display:block}
+#pan .fhint{font-size:11px;color:#9ca3af;line-height:1.4;margin-top:3px}
 
-/* ── GRID ── */
-#pan-roi .p-row {
-  display: grid;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-#pan-roi .p-row.c2 { grid-template-columns: 1fr 1fr; }
-#pan-roi .p-row.c3 { grid-template-columns: 1fr 1fr 1fr; }
+/* row grids */
+#pan .r2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+#pan .r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+#pan .r2>.f,#pan .r3>.f{margin-bottom:0}
 
-/* ── FIELD ── */
-#pan-roi .p-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
+/* input wrap */
+#pan .iw{position:relative;display:flex;align-items:center}
+#pan .iw input,#pan .iw select{
+  width:100%;display:block;
+  background:#f9fafb;
+  border:1.5px solid #e5e7eb!important;
+  border-radius:10px;padding:11px 14px;
+  color:#111827;font-size:14px;font-weight:600;font-family:inherit;
+  transition:border-color .2s,background .2s;
+  -webkit-appearance:none;appearance:none;min-width:0;
 }
-#pan-roi .p-field > label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,.5);
-  letter-spacing: .2px;
-  white-space: nowrap;
+#pan .iw.pre input{padding-left:28px}
+#pan .iw.suf input{padding-right:40px}
+#pan .iw input:focus,#pan .iw select:focus{
+  outline:none;
+  border-color:#dc3522!important;
+  background:#fff;
 }
-#pan-roi .p-hint {
-  font-size: 11px;
-  color: rgba(255,255,255,.28);
-  line-height: 1.4;
-}
+#pan .iw input::placeholder{color:#d1d5db;font-weight:400}
+#pan .iw select option{background:#fff;color:#111827}
+#pan .sym{position:absolute;pointer-events:none;font-size:13px;font-weight:600;color:#9ca3af;z-index:1;line-height:1}
+#pan .sym.l{left:12px}
+#pan .sym.r{right:13px;font-size:12px}
 
-/* ── INPUT WRAPPER ── */
-#pan-roi .p-iw {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-#pan-roi .p-iw input,
-#pan-roi .p-iw select {
-  width: 100%;
-  display: block;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.1) !important;
-  border-radius: 10px;
-  padding: 11px 14px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: inherit;
-  transition: border-color .2s, background .2s;
-  -webkit-appearance: none;
-  appearance: none;
-  min-width: 0;
-}
-/* prefix/suffix padding compensation */
-#pan-roi .p-iw.has-pre input  { padding-left: 28px; }
-#pan-roi .p-iw.has-suf input  { padding-right: 38px; }
-#pan-roi .p-iw input:focus,
-#pan-roi .p-iw select:focus {
-  border-color: rgba(220,53,34,.5) !important;
-  background: rgba(220,53,34,.05);
-}
-#pan-roi .p-iw input::placeholder { color: rgba(255,255,255,.2); }
-#pan-roi .p-iw select option { background: #1a2035; color: #fff; }
+/* divider */
+#pan .dv{height:1px;background:#f0f0f0;margin:22px 0}
 
-#pan-roi .p-pre {
-  position: absolute;
-  left: 13px;
-  color: rgba(255,255,255,.3);
-  font-size: 13px;
-  font-weight: 600;
-  pointer-events: none;
-  z-index: 1;
-  line-height: 1;
+/* ── SLIDER FIELD ── */
+#pan .slider-field{margin-bottom:20px}
+#pan .slider-field:last-child{margin-bottom:0}
+#pan .slider-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+#pan .slider-name{font-size:12px;font-weight:600;color:#6b7280}
+#pan .slider-live{font-size:13px;font-weight:700;color:#dc3522}
+#pan input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:4px;
+  border-radius:100px;outline:none;cursor:pointer;
+  border:none!important;padding:0!important;
+  background:#e5e7eb;
 }
-#pan-roi .p-suf {
-  position: absolute;
-  right: 13px;
-  color: rgba(255,255,255,.3);
-  font-size: 12px;
-  pointer-events: none;
-  z-index: 1;
-  line-height: 1;
+#pan input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:#dc3522;cursor:pointer;
+  box-shadow:0 0 0 3px rgba(220,53,34,.15);
+  transition:box-shadow .2s;
 }
+#pan input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 5px rgba(220,53,34,.2)}
+#pan .slider-ends{display:flex;justify-content:space-between;margin-top:5px}
+#pan .slider-ends span{font-size:10px;color:#9ca3af}
 
-/* ── DIVIDER ── */
-#pan-roi .p-div {
-  height: 1px;
-  background: rgba(255,255,255,.06);
-  margin: 26px 0;
-}
+/* toggle */
+#pan .tog-row{display:flex;align-items:flex-start;gap:11px;cursor:pointer;user-select:none;margin-bottom:16px}
+#pan .tog-row:last-child{margin-bottom:0}
+#pan .tog{position:relative;width:38px;height:22px;flex-shrink:0;margin-top:1px}
+#pan .tog input{opacity:0;width:0;height:0;position:absolute}
+#pan .tsl{position:absolute;inset:0;background:#e5e7eb;border-radius:100px;transition:background .25s;cursor:pointer}
+#pan .tsl::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+#pan .tog input:checked~.tsl{background:#dc3522}
+#pan .tog input:checked~.tsl::before{transform:translateX(16px)}
+#pan .tog-txt{font-size:13px;font-weight:600;color:#374151}
+#pan .tog-txt small{display:block;font-size:11px;font-weight:400;color:#9ca3af;margin-top:2px}
 
-/* ── TOGGLE ── */
-#pan-roi .p-toggle-row {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  user-select: none;
-}
-#pan-roi .p-toggle {
-  position: relative;
-  width: 42px; height: 24px;
-  flex-shrink: 0;
-}
-#pan-roi .p-toggle input {
-  opacity: 0;
-  width: 0; height: 0;
-  position: absolute;
-}
-#pan-roi .p-tslider {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,.1);
-  border-radius: 100px;
-  transition: background .25s;
-  cursor: pointer;
-}
-#pan-roi .p-tslider::before {
-  content: '';
-  position: absolute;
-  width: 18px; height: 18px;
-  left: 3px; top: 3px;
-  background: rgba(255,255,255,.55);
-  border-radius: 50%;
-  transition: transform .25s, background .25s;
-}
-#pan-roi .p-toggle input:checked ~ .p-tslider { background: #dc3522; }
-#pan-roi .p-toggle input:checked ~ .p-tslider::before {
-  transform: translateX(18px);
-  background: #fff;
-}
-#pan-roi .p-toggle-txt {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,.7);
-}
-#pan-roi .p-toggle-txt small {
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(255,255,255,.33);
-  margin-top: 2px;
-}
-#pan-roi .p-catchall { display: none; }
-#pan-roi .p-catchall.open { display: block; }
+/* catchall expandable */
+#pan .catchall-x{display:none}
+#pan .catchall-x.open{display:block}
 
-/* ── SCENARIO SELECTOR ── */
-#pan-roi .p-scenario-selector {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
+/* ── RESULTS (RIGHT) ── */
+#pan .res{
+  padding:32px 36px 36px;
+  display:flex;flex-direction:column;
+  background:#fafafa;
+  min-height:520px;
 }
-#pan-roi .p-sc-btn {
-  flex: 1;
-  min-width: 120px;
-  background: rgba(255,255,255,.04);
-  border: 2px solid rgba(255,255,255,.08) !important;
-  border-radius: 12px;
-  padding: 14px 16px;
-  cursor: pointer;
-  text-align: center;
-  transition: border-color .2s, background .2s;
-  color: #fff;
-  font-family: inherit;
+#pan .res-title{
+  font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:#9ca3af;margin-bottom:22px;
+  display:flex;align-items:center;gap:9px;
 }
-#pan-roi .p-sc-btn:hover {
-  border-color: rgba(220,53,34,.3) !important;
-  background: rgba(220,53,34,.04);
-}
-#pan-roi .p-sc-btn.active {
-  border-color: #dc3522 !important;
-  background: rgba(220,53,34,.1);
-}
-#pan-roi .p-sc-btn-tag {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.35);
-  margin-bottom: 5px;
-}
-#pan-roi .p-sc-btn.active .p-sc-btn-tag { color: #ff6b52; }
-#pan-roi .p-sc-btn-pct {
-  font-size: 20px;
-  font-weight: 800;
-  color: #fff;
-  margin-bottom: 2px;
-}
-#pan-roi .p-sc-btn-desc {
-  font-size: 11px;
-  color: rgba(255,255,255,.3);
-}
+#pan .res-title::after{content:'';flex:1;height:1px;background:#e5e7eb}
 
-/* ── CTA BUTTON ── */
-#pan-roi .p-btn {
-  width: 100%;
-  background: #dc3522;
-  color: #fff;
-  border: none !important;
-  padding: 16px 24px;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: inherit;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background .2s, transform .1s;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  letter-spacing: .2px;
+/* empty */
+#pan .empty{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:20px;
 }
-#pan-roi .p-btn:hover { background: #c42e1c; }
-#pan-roi .p-btn:active { transform: scale(.99); }
-#pan-roi .p-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+#pan .empty-icon{font-size:32px;margin-bottom:12px;opacity:.3}
+#pan .empty-txt{font-size:13px;color:#9ca3af;line-height:1.65;max-width:200px}
 
-/* ── ERROR ── */
-#pan-roi .p-err {
-  display: none;
-  background: rgba(220,53,34,.1);
-  border: 1px solid rgba(220,53,34,.3) !important;
-  border-radius: 10px;
-  padding: 11px 15px;
-  font-size: 13px;
-  color: #ff8870;
-  margin-top: 12px;
-}
-#pan-roi .p-err.show { display: block; }
+/* output */
+#pan .out{display:none;flex-direction:column;flex:1}
 
-/* ── RESULTS ── */
-#pan-roi .p-results { display: none; margin-top: 10px; }
-#pan-roi .p-results.visible { display: block; }
+/* HERO ROI */
+#pan .hero{
+  background:linear-gradient(135deg,#dc3522 0%,#e8472f 100%);
+  border-radius:16px;padding:22px 22px 18px;margin-bottom:18px;text-align:center;
+  position:relative;overflow:hidden;
+}
+#pan .hero::before{
+  content:'';position:absolute;
+  width:120px;height:120px;top:-40px;right:-30px;
+  background:rgba(255,255,255,.06);border-radius:50%;
+  pointer-events:none;
+}
+#pan .hero-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:8px}
+#pan .hero-val{font-size:clamp(40px,6vw,56px);font-weight:900;color:#fff;line-height:1;margin-bottom:5px}
+#pan .hero-sub{font-size:12px;color:rgba(255,255,255,.65);line-height:1.5}
 
-#pan-roi .p-results-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 22px;
+/* PILLARS */
+#pan .pillars{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+#pan .pillar{
+  background:#fff;border:1px solid #e5e7eb!important;
+  border-radius:11px;padding:12px 14px;display:flex;align-items:center;gap:11px;
 }
-#pan-roi .p-results-title {
-  font-size: 17px;
-  font-weight: 800;
-  color: #fff;
-}
-#pan-roi .p-roi-pill {
-  background: linear-gradient(135deg, #dc3522, #ff5c43);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  padding: 7px 18px;
-  border-radius: 100px;
-}
+#pan .p-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+#pan .p-info{flex:1;min-width:0}
+#pan .p-name{font-size:11px;font-weight:600;color:#6b7280}
+#pan .p-track{height:4px;background:#f3f4f6;border-radius:100px;overflow:hidden;margin-top:5px}
+#pan .p-bar{height:100%;border-radius:100px;transition:width .85s cubic-bezier(.4,0,.2,1);width:0%}
+#pan .p-amt{font-size:15px;font-weight:800;color:#111827;white-space:nowrap}
 
-/* ── BREAKDOWN ── */
-#pan-roi .p-breakdown {
-  background: rgba(255,255,255,.025);
-  border: 1px solid rgba(255,255,255,.07) !important;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 20px;
-}
-#pan-roi .p-breakdown-hdr {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 22px;
-}
-#pan-roi .p-breakdown-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255,255,255,.6);
-}
-#pan-roi .p-bd-row { margin-bottom: 20px; }
-#pan-roi .p-bd-row:last-child { margin-bottom: 0; }
-#pan-roi .p-bd-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 9px;
-}
-#pan-roi .p-bd-left {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-#pan-roi .p-bd-dot {
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-#pan-roi .p-bd-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,.65);
-}
-#pan-roi .p-bd-share {
-  font-size: 11px;
-  color: rgba(255,255,255,.25);
-  margin-left: 4px;
-}
-#pan-roi .p-bd-amt {
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-}
-#pan-roi .p-bar-track {
-  height: 7px;
-  background: rgba(255,255,255,.06);
-  border-radius: 100px;
-  overflow: hidden;
-}
-#pan-roi .p-bar-fill {
-  height: 100%;
-  border-radius: 100px;
-  transition: width 1s cubic-bezier(.4,0,.2,1);
-  width: 0%;
-}
+/* STAT GRID */
+#pan .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
+#pan .stat{background:#fff;border:1px solid #e5e7eb!important;border-radius:11px;padding:13px 14px}
+#pan .stat-lbl{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#9ca3af;margin-bottom:5px}
+#pan .stat-val{font-size:clamp(15px,2vw,19px);font-weight:800;color:#111827;line-height:1}
+#pan .stat-val.red{color:#dc3522}
+#pan .stat-val.grn{color:#16a34a}
+#pan .stat-sub{font-size:10px;color:#9ca3af;margin-top:3px}
 
-/* Breakdown total line */
-#pan-roi .p-bd-total {
-  margin-top: 20px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(255,255,255,.07) !important;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* NET */
+#pan .net{
+  margin-top:auto;
+  background:#f0fdf4;border:1px solid #bbf7d0!important;
+  border-radius:12px;padding:16px 18px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
 }
-#pan-roi .p-bd-total-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255,255,255,.5);
-}
-#pan-roi .p-bd-total-val {
-  font-size: 20px;
-  font-weight: 800;
-  color: #ff6b52;
-}
+#pan .net-l strong{display:block;font-size:13px;font-weight:700;color:#15803d;margin-bottom:2px}
+#pan .net-l span{font-size:11px;color:#6b7280}
+#pan .net-val{font-size:clamp(20px,2.5vw,26px);font-weight:900;color:#16a34a}
 
-/* ── 5 KPI CARDS ── */
-#pan-roi .p-kpis {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-#pan-roi .p-kpi {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.08) !important;
-  border-radius: 14px;
-  padding: 16px 14px;
-  min-width: 0;
-}
-#pan-roi .p-kpi.red  { background: rgba(220,53,34,.08);  border-color: rgba(220,53,34,.2) !important; }
-#pan-roi .p-kpi.green{ background: rgba(39,174,96,.08);  border-color: rgba(39,174,96,.2) !important; }
-#pan-roi .p-kpi-lbl {
-  font-size: 10px;
-  font-weight: 700;
-  color: rgba(255,255,255,.35);
-  text-transform: uppercase;
-  letter-spacing: .8px;
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-#pan-roi .p-kpi-val {
-  font-size: clamp(15px, 1.8vw, 20px);
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
-  word-break: break-all;
-}
-#pan-roi .p-kpi.red   .p-kpi-val { color: #ff6b52; }
-#pan-roi .p-kpi.green .p-kpi-val { color: #4ade80; }
-#pan-roi .p-kpi-sub {
-  font-size: 10px;
-  color: rgba(255,255,255,.28);
-  margin-top: 5px;
-}
-
-/* ── SUMMARY ── */
-#pan-roi .p-summary {
-  background: rgba(220,53,34,.07);
-  border: 1px solid rgba(220,53,34,.18) !important;
-  border-radius: 14px;
-  padding: 20px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-#pan-roi .p-sum-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .8px;
-  color: rgba(255,255,255,.4);
-  margin-bottom: 3px;
-}
-#pan-roi .p-sum-detail {
-  font-size: 12px;
-  color: rgba(255,255,255,.28);
-  margin-top: 3px;
-}
-#pan-roi .p-sum-right {
-  display: flex;
-  gap: 28px;
-  flex-wrap: wrap;
-}
-#pan-roi .p-sum-item { text-align: right; }
-#pan-roi .p-sum-item-lbl {
-  font-size: 11px;
-  color: rgba(255,255,255,.33);
-  margin-bottom: 3px;
-}
-#pan-roi .p-sum-item-val {
-  font-size: clamp(18px, 2vw, 22px);
-  font-weight: 800;
-  line-height: 1;
-}
-#pan-roi .p-sum-item-val.red   { color: #ff6b52; }
-#pan-roi .p-sum-item-val.green { color: #4ade80; }
-#pan-roi .p-sum-item-val.dim   { color: rgba(255,255,255,.5); font-size: 18px; }
-
-/* subsidized note */
-#pan-roi .p-sub-note {
-  display: none;
-  margin-top: 14px;
-  padding: 13px 17px;
-  background: rgba(74,158,255,.07);
-  border: 1px solid rgba(74,158,255,.18) !important;
-  border-radius: 10px;
-  font-size: 12px;
-  color: rgba(255,255,255,.5);
-  line-height: 1.7;
-}
-#pan-roi .p-sub-note strong { color: rgba(74,158,255,.85); }
+/* sub note */
+#pan .sub-note{display:none;margin-top:12px;padding:11px 14px;background:#eff6ff;border:1px solid #bfdbfe!important;border-radius:9px;font-size:11px;color:#3b82f6;line-height:1.65}
+#pan .sub-note strong{color:#1d4ed8}
 
 /* ── RESPONSIVE ── */
-@media (max-width: 720px) {
-  #pan-roi .p-header,
-  #pan-roi .p-body { padding: 24px 20px; }
-  #pan-roi .p-row.c3 { grid-template-columns: 1fr 1fr; }
-  #pan-roi .p-kpis   { grid-template-columns: 1fr 1fr; }
-  #pan-roi .p-kpi:nth-child(5) { grid-column: span 2; }
-  #pan-roi .p-summary { flex-direction: column; align-items: flex-start; }
-  #pan-roi .p-sum-right { width: 100%; justify-content: flex-start; }
-  #pan-roi .p-sum-item { text-align: left; }
-  #pan-roi .p-scenario-selector { flex-direction: column; }
-  #pan-roi .p-sc-btn { min-width: unset; }
+@media(max-width:680px){
+  #pan .hd{padding:28px 22px 24px}
+  #pan .main{grid-template-columns:1fr}
+  #pan .inp{border-right:none;border-bottom:1px solid #f0f0f0;padding:26px 22px}
+  #pan .res{padding:26px 22px 30px;min-height:unset;background:#fafafa}
+  #pan .r2,#pan .r3{grid-template-columns:1fr 1fr}
+  #pan .stats{grid-template-columns:1fr 1fr}
 }
-@media (max-width: 500px) {
-  #pan-roi .p-row.c2,
-  #pan-roi .p-row.c3 { grid-template-columns: 1fr; }
-  #pan-roi .p-kpis    { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 360px) {
-  #pan-roi .p-kpis { grid-template-columns: 1fr; }
-  #pan-roi .p-kpi:nth-child(5) { grid-column: span 1; }
+@media(max-width:420px){
+  #pan .r2,#pan .r3{grid-template-columns:1fr}
+  #pan .stats{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
-<div id="pan-roi">
+<div id="pan">
 
   <!-- HEADER -->
-  <div class="p-header">
-    <div class="p-badge">Dining Loss Intelligence</div>
-    <h1>Calculate Your <span>ROI</span> with Panoptyc</h1>
-    <p>Enter your site details to see estimated annual losses and how much you could save with AI-powered loss prevention.</p>
+  <div class="hd">
+    <div class="hd-badge">Dining Loss Intelligence</div>
+    <h1>Calculate Your <em>ROI</em> with Panoptyc</h1>
+    <p>Enter your site details and see your financial impact update in real time.</p>
   </div>
 
-  <div class="p-body">
+  <div class="main">
 
-    <!-- STEP 1: SITE PROFILE -->
-    <div class="p-slabel">Step 1 — Site Profile</div>
+    <!-- ── LEFT: INPUTS ── -->
+    <div class="inp">
 
-    <div class="p-row c2">
-      <div class="p-field">
-        <label>Annual Revenue</label>
-        <div class="p-iw has-pre">
-          <span class="p-pre">$</span>
-          <input id="pan-revenue" type="number" placeholder="e.g. 1,000,000" min="0">
+      <div class="sh">Your Site</div>
+
+      <div class="f">
+        <label class="fl">Annual Revenue</label>
+        <div class="iw pre">
+          <span class="sym l">$</span>
+          <input id="p-rev" type="number" placeholder="1,000,000" min="0" oninput="pc()">
         </div>
       </div>
-      <div class="p-field">
-        <label>Average Check ($)</label>
-        <div class="p-iw has-pre">
-          <span class="p-pre">$</span>
-          <input id="pan-avg-check" type="number" placeholder="e.g. 5.00" step="0.01" min="0">
-        </div>
-        <div class="p-hint">Used if no catchall data is provided</div>
-      </div>
-    </div>
 
-    <div class="p-row c3">
-      <div class="p-field">
-        <label>Number of Kiosks</label>
-        <div class="p-iw">
-          <input id="pan-kiosks" type="number" placeholder="e.g. 2" min="1">
+      <div class="r2">
+        <div class="f">
+          <label class="fl">Number of Kiosks</label>
+          <div class="iw"><input id="p-kiosks" type="number" placeholder="2" min="1" oninput="pc()"></div>
         </div>
-      </div>
-      <div class="p-field">
-        <label>Plan Type</label>
-        <div class="p-iw">
-          <select id="pan-plan">
-            <option value="200">Cafe Silver — $200/kiosk/mo</option>
-            <option value="300">Cafe Gold — $300/kiosk/mo</option>
-            <option value="450">Cafe Diamond — $450/kiosk/mo</option>
-          </select>
-        </div>
-      </div>
-      <div class="p-field">
-        <label>Site Type</label>
-        <div class="p-iw">
-          <select id="pan-subsidized">
-            <option value="no">Non-Subsidized</option>
-            <option value="yes">Subsidized (Client Pays)</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="p-div"></div>
-
-    <!-- OPERATIONAL ASSUMPTIONS -->
-    <div class="p-slabel">Operational Assumptions</div>
-
-    <div class="p-row c3">
-      <div class="p-field">
-        <label>Product Cost % of Revenue</label>
-        <div class="p-iw has-suf">
-          <input id="pan-product-cost-pct" type="number" value="40" min="0" max="100">
-          <span class="p-suf">%</span>
-        </div>
-        <div class="p-hint">Industry default: 35–45%</div>
-      </div>
-      <div class="p-field">
-        <label>Product Cost Reduction</label>
-        <div class="p-iw has-suf">
-          <input id="pan-product-reduction" type="number" value="3" min="0" max="100">
-          <span class="p-suf">%</span>
-        </div>
-        <div class="p-hint">Typical range: 2–6%</div>
-      </div>
-      <div class="p-field">
-        <label>Revenue Recovery</label>
-        <div class="p-iw has-suf">
-          <input id="pan-rev-recovery" type="number" value="2" min="0" max="100">
-          <span class="p-suf">%</span>
-        </div>
-        <div class="p-hint">Typical range: 1–3%</div>
-      </div>
-    </div>
-
-    <div class="p-div"></div>
-
-    <!-- CATCHALL TOGGLE -->
-    <label class="p-toggle-row" for="pan-catchall-chk">
-      <div class="p-toggle">
-        <input type="checkbox" id="pan-catchall-chk" onchange="panToggle(this)">
-        <span class="p-tslider"></span>
-      </div>
-      <div class="p-toggle-txt">
-        I have Catchall Analysis data
-        <small>Uses real incident data for a verified theft rate — replaces the 3% industry default</small>
-      </div>
-    </label>
-
-    <div id="pan-catchall" class="p-catchall">
-      <div class="p-slabel">Step 2 — Catchall Deep-Dive Data</div>
-      <div class="p-row c2">
-        <div class="p-field">
-          <label>Total Transactions Analyzed</label>
-          <div class="p-iw">
-            <input id="pan-transactions" type="number" placeholder="e.g. 1,849">
-          </div>
-        </div>
-        <div class="p-field">
-          <label>Revenue During Analysis Period</label>
-          <div class="p-iw has-pre">
-            <span class="p-pre">$</span>
-            <input id="pan-analysis-revenue" type="number" placeholder="e.g. 9,144">
+        <div class="f">
+          <label class="fl">Plan</label>
+          <div class="iw">
+            <select id="p-plan" onchange="pc()">
+              <option value="200">Silver $200/mo</option>
+              <option value="300">Gold $300/mo</option>
+              <option value="450">Diamond $450/mo</option>
+            </select>
           </div>
         </div>
       </div>
-      <div class="p-row c3">
-        <div class="p-field">
-          <label>Walkout Incidents</label>
-          <div class="p-iw">
-            <input id="pan-walkouts" type="number" placeholder="e.g. 42">
+
+      <div class="dv"></div>
+      <div class="sh">Assumptions <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:#9ca3af;margin-left:4px">(optional — edit to customise)</span></div>
+
+      <!-- Theft Reduction Scenario -->
+      <div class="slider-field">
+        <div class="slider-top">
+          <span class="slider-name">Theft Reduction Scenario</span>
+          <span id="sv-theft" class="slider-live">50%</span>
+        </div>
+        <input id="p-theft-r" type="range" min="25" max="60" value="50" step="5" oninput="psl('p-theft-r','sv-theft','%');pc()">
+        <div class="slider-ends"><span>25% Conservative</span><span>60% High Impact</span></div>
+      </div>
+
+      <!-- Theft Rate -->
+      <div class="slider-field">
+        <div class="slider-top">
+          <span class="slider-name">Theft Rate at Your Site</span>
+          <span id="sv-trate" class="slider-live">3%</span>
+        </div>
+        <input id="p-trate" type="range" min="1" max="10" value="3" step="0.5" oninput="psl('p-trate','sv-trate','%');pc()">
+        <div class="slider-ends"><span>1% Low</span><span>10% High</span></div>
+        <div class="fhint">Industry avg 3–5%. Catchall data overrides this.</div>
+      </div>
+
+      <!-- Product Cost Reduction -->
+      <div class="slider-field">
+        <div class="slider-top">
+          <span class="slider-name">Product Cost Reduction</span>
+          <span id="sv-pcr" class="slider-live">3%</span>
+        </div>
+        <input id="p-pcr" type="range" min="0" max="10" value="3" step="0.5" oninput="psl('p-pcr','sv-pcr','%');pc()">
+        <div class="slider-ends"><span>0%</span><span>10%</span></div>
+        <div class="fhint">Typical: 2–6%. Live Oak confirmed 6%.</div>
+      </div>
+
+      <!-- Revenue Recovery -->
+      <div class="slider-field">
+        <div class="slider-top">
+          <span class="slider-name">Revenue Recovery</span>
+          <span id="sv-rr" class="slider-live">2%</span>
+        </div>
+        <input id="p-rr" type="range" min="0" max="6" value="2" step="0.5" oninput="psl('p-rr','sv-rr','%');pc()">
+        <div class="slider-ends"><span>0%</span><span>6%</span></div>
+        <div class="fhint">Typical: 1–3% recovered from deterrence.</div>
+      </div>
+
+      <div class="dv"></div>
+      <div class="sh">Options</div>
+
+      <label class="tog-row" for="p-sub">
+        <div class="tog"><input type="checkbox" id="p-sub" onchange="pc()"><span class="tsl"></span></div>
+        <div class="tog-txt">Subsidized site<small>Client absorbs losses, not operator</small></div>
+      </label>
+
+      <label class="tog-row" for="p-catch-chk" style="margin-bottom:0">
+        <div class="tog"><input type="checkbox" id="p-catch-chk" onchange="ptog(this)"><span class="tsl"></span></div>
+        <div class="tog-txt">I have Catchall data<small>Overrides the theft rate slider above</small></div>
+      </label>
+
+      <div id="p-cx" class="catchall-x">
+        <div class="dv" style="margin:16px 0 14px"></div>
+        <div class="sh" style="margin-bottom:14px">Catchall Deep-Dive</div>
+        <div class="r2">
+          <div class="f" style="margin:0">
+            <label class="fl">Transactions</label>
+            <div class="iw"><input id="p-txns" type="number" placeholder="1,849" oninput="pc()"></div>
+          </div>
+          <div class="f" style="margin:0">
+            <label class="fl">Revenue analyzed</label>
+            <div class="iw pre"><span class="sym l">$</span><input id="p-arev" type="number" placeholder="9,144" oninput="pc()"></div>
           </div>
         </div>
-        <div class="p-field">
-          <label>Under-Ringing Incidents</label>
-          <div class="p-iw">
-            <input id="pan-underring" type="number" placeholder="e.g. 21">
+        <div class="r3" style="margin-top:14px">
+          <div class="f" style="margin:0">
+            <label class="fl">Walkouts</label>
+            <div class="iw"><input id="p-wo" type="number" placeholder="42" oninput="pc()"></div>
           </div>
-        </div>
-        <div class="p-field">
-          <label>Cancellations / Other</label>
-          <div class="p-iw">
-            <input id="pan-cancellations" type="number" placeholder="e.g. 28">
+          <div class="f" style="margin:0">
+            <label class="fl">Under-ring</label>
+            <div class="iw"><input id="p-ur" type="number" placeholder="21" oninput="pc()"></div>
+          </div>
+          <div class="f" style="margin:0">
+            <label class="fl">Cancels</label>
+            <div class="iw"><input id="p-ca" type="number" placeholder="28" oninput="pc()"></div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="p-div"></div>
+    </div><!-- /inputs -->
 
-    <!-- SCENARIO SELECTOR -->
-    <div class="p-slabel">Select Theft Reduction Scenario</div>
-    <div class="p-scenario-selector">
-      <button class="p-sc-btn active" data-pct="25" onclick="panSelectScenario(this)">
-        <div class="p-sc-btn-tag">Conservative</div>
-        <div class="p-sc-btn-pct">25%</div>
-        <div class="p-sc-btn-desc">theft reduction</div>
-      </button>
-      <button class="p-sc-btn" data-pct="50" onclick="panSelectScenario(this)">
-        <div class="p-sc-btn-tag">Typical</div>
-        <div class="p-sc-btn-pct">50%</div>
-        <div class="p-sc-btn-desc">theft reduction</div>
-      </button>
-      <button class="p-sc-btn" data-pct="60" onclick="panSelectScenario(this)">
-        <div class="p-sc-btn-tag">High Impact</div>
-        <div class="p-sc-btn-pct">60%</div>
-        <div class="p-sc-btn-desc">theft reduction</div>
-      </button>
-    </div>
+    <!-- ── RIGHT: RESULTS ── -->
+    <div class="res">
+      <div class="res-title">Your Impact</div>
 
-    <!-- CTA -->
-    <button class="p-btn" onclick="panCalculate()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-      Calculate My ROI
-    </button>
-    <div id="pan-err" class="p-err">Please enter your Annual Revenue and Number of Kiosks to continue.</div>
-
-    <!-- ===== RESULTS ===== -->
-    <div id="pan-results" class="p-results">
-
-      <div class="p-div"></div>
-
-      <div class="p-results-top">
-        <div class="p-results-title">Your Dining Loss Analysis</div>
-        <div id="pan-roi-pill" class="p-roi-pill"></div>
+      <div class="empty" id="p-empty">
+        <div class="empty-icon">📊</div>
+        <div class="empty-txt">Enter your revenue and kiosks to see live results.</div>
       </div>
 
-      <!-- 1. BREAKDOWN FIRST -->
-      <div class="p-slabel" style="margin-bottom:14px">Annual Financial Impact Breakdown</div>
-      <div class="p-breakdown">
-        <div class="p-breakdown-hdr">
-          <div class="p-breakdown-title">Three pillars of value created</div>
-          <div id="pan-bd-scenario-tag" style="font-size:11px;color:rgba(255,255,255,.3)"></div>
+      <div id="p-out" class="out">
+
+        <div class="hero">
+          <div class="hero-lbl">Return on Investment</div>
+          <div id="p-roi" class="hero-val">—</div>
+          <div id="p-roi-sub" class="hero-sub">—</div>
         </div>
 
-        <div class="p-bd-row">
-          <div class="p-bd-meta">
-            <div class="p-bd-left">
-              <div class="p-bd-dot" style="background:#dc3522"></div>
-              <span class="p-bd-name">Theft Reduction</span>
-              <span id="pan-bd-theft-share" class="p-bd-share"></span>
+        <div class="pillars">
+          <div class="pillar">
+            <div class="p-dot" style="background:#dc3522"></div>
+            <div class="p-info">
+              <div class="p-name">Theft Reduction</div>
+              <div class="p-track"><div id="pb-theft" class="p-bar" style="background:#dc3522"></div></div>
             </div>
-            <div id="pan-bd-theft-amt" class="p-bd-amt">—</div>
+            <div id="pa-theft" class="p-amt">—</div>
           </div>
-          <div class="p-bar-track">
-            <div id="pan-bar-theft" class="p-bar-fill" style="background:#dc3522"></div>
-          </div>
-        </div>
-
-        <div class="p-bd-row">
-          <div class="p-bd-meta">
-            <div class="p-bd-left">
-              <div class="p-bd-dot" style="background:#f07b2a"></div>
-              <span class="p-bd-name">Product Cost Reduction</span>
-              <span id="pan-bd-product-share" class="p-bd-share"></span>
+          <div class="pillar">
+            <div class="p-dot" style="background:#f07b2a"></div>
+            <div class="p-info">
+              <div class="p-name">Product Cost Reduction</div>
+              <div class="p-track"><div id="pb-prod" class="p-bar" style="background:#f07b2a"></div></div>
             </div>
-            <div id="pan-bd-product-amt" class="p-bd-amt">—</div>
+            <div id="pa-prod" class="p-amt">—</div>
           </div>
-          <div class="p-bar-track">
-            <div id="pan-bar-product" class="p-bar-fill" style="background:#f07b2a"></div>
-          </div>
-        </div>
-
-        <div class="p-bd-row">
-          <div class="p-bd-meta">
-            <div class="p-bd-left">
-              <div class="p-bd-dot" style="background:#4a9eff"></div>
-              <span class="p-bd-name">Revenue Recovery</span>
-              <span id="pan-bd-revenue-share" class="p-bd-share"></span>
+          <div class="pillar">
+            <div class="p-dot" style="background:#2563eb"></div>
+            <div class="p-info">
+              <div class="p-name">Revenue Recovery</div>
+              <div class="p-track"><div id="pb-rev" class="p-bar" style="background:#2563eb"></div></div>
             </div>
-            <div id="pan-bd-revenue-amt" class="p-bd-amt">—</div>
-          </div>
-          <div class="p-bar-track">
-            <div id="pan-bar-revenue" class="p-bar-fill" style="background:#4a9eff"></div>
+            <div id="pa-rev" class="p-amt">—</div>
           </div>
         </div>
 
-        <div class="p-bd-total">
-          <div class="p-bd-total-label">Total Value Created</div>
-          <div id="pan-bd-total-val" class="p-bd-total-val">—</div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-lbl">Theft Rate</div>
+            <div id="st-trate" class="stat-val red">—</div>
+            <div class="stat-sub">of transactions</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">Annual Theft Loss</div>
+            <div id="st-tloss" class="stat-val red">—</div>
+            <div class="stat-sub">estimated shrink</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">Panoptyc Cost</div>
+            <div id="st-cost" class="stat-val">—</div>
+            <div id="st-cost-sub" class="stat-sub">per year</div>
+          </div>
+          <div class="stat">
+            <div class="stat-lbl">Total Impact</div>
+            <div id="st-total" class="stat-val">—</div>
+            <div class="stat-sub">all three pillars</div>
+          </div>
         </div>
+
+        <div class="net">
+          <div class="net-l">
+            <strong>Net Annual Savings</strong>
+            <span>Total impact minus Panoptyc cost</span>
+          </div>
+          <div id="p-net" class="net-val">—</div>
+        </div>
+
+        <div id="p-subnote" class="sub-note">
+          <strong>Subsidized site:</strong> Your client is directly funding these losses. Every dollar recovered strengthens the case for your program, and their trust & confidence.
+        </div>
+
       </div>
-
-      <!-- 2. LOSS ANALYSIS KPIS -->
-      <div class="p-slabel" style="margin-bottom:14px">Loss Analysis</div>
-      <div class="p-kpis">
-        <div class="p-kpi red">
-          <div class="p-kpi-lbl">Theft Rate</div>
-          <div id="pan-k-theft-rate" class="p-kpi-val">—</div>
-          <div class="p-kpi-sub">of transactions</div>
-        </div>
-        <div class="p-kpi red">
-          <div class="p-kpi-lbl">Annual Theft Loss</div>
-          <div id="pan-k-theft-loss" class="p-kpi-val">—</div>
-          <div class="p-kpi-sub">estimated shrink</div>
-        </div>
-        <div class="p-kpi">
-          <div class="p-kpi-lbl">Total Financial Impact</div>
-          <div id="pan-k-total-impact" class="p-kpi-val">—</div>
-          <div id="pan-k-scenario-sub" class="p-kpi-sub">selected scenario</div>
-        </div>
-        <div class="p-kpi">
-          <div class="p-kpi-lbl">Annual Panoptyc Cost</div>
-          <div id="pan-k-cost" class="p-kpi-val">—</div>
-          <div id="pan-k-cost-sub" class="p-kpi-sub">per year</div>
-        </div>
-        <div class="p-kpi green">
-          <div class="p-kpi-lbl">ROI Multiple</div>
-          <div id="pan-k-roi" class="p-kpi-val">—</div>
-          <div id="pan-k-roi-sub" class="p-kpi-sub">selected scenario</div>
-        </div>
-      </div>
-
-      <!-- 3. SUMMARY -->
-      <div class="p-summary">
-        <div>
-          <div class="p-sum-label">Net Result</div>
-          <div id="pan-sum-detail" class="p-sum-detail"></div>
-        </div>
-        <div class="p-sum-right">
-          <div class="p-sum-item">
-            <div class="p-sum-item-lbl">Total Impact</div>
-            <div id="pan-sum-impact" class="p-sum-item-val red">—</div>
-          </div>
-          <div class="p-sum-item">
-            <div class="p-sum-item-lbl">Panoptyc Cost</div>
-            <div id="pan-sum-cost" class="p-sum-item-val dim">—</div>
-          </div>
-          <div class="p-sum-item">
-            <div class="p-sum-item-lbl">Net Savings</div>
-            <div id="pan-sum-net" class="p-sum-item-val green">—</div>
-          </div>
-          <div class="p-sum-item">
-            <div class="p-sum-item-lbl">ROI</div>
-            <div id="pan-sum-roi" class="p-sum-item-val green">—</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="pan-sub-note" class="p-sub-note">
-        <strong>Subsidized Site Note:</strong> At subsidized cafeterias, losses are absorbed directly by the client. This analysis reflects <strong>client program protection</strong> value — the true financial exposure for your end client.
-      </div>
-
     </div>
-    <!-- /results -->
 
   </div>
 </div>
 
 <script>
 (function(){
+  function fmt(n){return'$'+Math.round(n).toLocaleString('en-US')}
+  function fmtP(n){return(n*100).toFixed(1)+'%'}
 
-  var selectedPct = 25; // default scenario
-
-  /* helpers */
-  function fmt(n){ return '$'+Math.round(n).toLocaleString('en-US'); }
-  function fmtPct(n){ return (n*100).toFixed(2)+'%'; }
-  function share(a,t){ return t>0 ? Math.round(a/t*100)+'%' : '0%'; }
-
-  /* toggle catchall */
-  window.panToggle = function(el){
-    document.getElementById('pan-catchall').classList.toggle('open', el.checked);
+  window.psl=function(id,lid,suffix){
+    var el=document.getElementById(id);
+    var v=parseFloat(el.value);
+    document.getElementById(lid).textContent=v+suffix;
+    var min=parseFloat(el.min),max=parseFloat(el.max);
+    var pct=((v-min)/(max-min))*100;
+    el.style.background='linear-gradient(to right,#dc3522 '+pct+'%,#e5e7eb '+pct+'%)';
   };
 
-  /* scenario select */
-  window.panSelectScenario = function(btn){
-    document.querySelectorAll('#pan-roi .p-sc-btn').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    selectedPct = parseInt(btn.getAttribute('data-pct'), 10);
-    /* if results already visible, re-render */
-    if(document.getElementById('pan-results').classList.contains('visible')){
-      panCalculate(true);
-    }
+  ['p-theft-r','p-trate','p-pcr','p-rr'].forEach(function(id){
+    var el=document.getElementById(id);
+    var min=parseFloat(el.min),max=parseFloat(el.max),v=parseFloat(el.value);
+    var pct=((v-min)/(max-min))*100;
+    el.style.background='linear-gradient(to right,#dc3522 '+pct+'%,#e5e7eb '+pct+'%)';
+  });
+
+  window.ptog=function(el){
+    document.getElementById('p-cx').classList.toggle('open',el.checked);
+    pc();
   };
 
-  /* main calculate */
-  window.panCalculate = function(silent){
+  window.pc=function(){
+    var revenue  =parseFloat(document.getElementById('p-rev').value)||0;
+    var kiosks   =parseFloat(document.getElementById('p-kiosks').value)||0;
+    var planRate =parseFloat(document.getElementById('p-plan').value)||200;
+    var theftR   =parseFloat(document.getElementById('p-theft-r').value)/100;
+    var trateSlider=parseFloat(document.getElementById('p-trate').value)/100;
+    var pcrPct   =parseFloat(document.getElementById('p-pcr').value)/100;
+    var rrPct    =parseFloat(document.getElementById('p-rr').value)/100;
+    var subsidized=document.getElementById('p-sub').checked;
+    var hasCatch =document.getElementById('p-catch-chk').checked;
 
-    var revenue           = parseFloat(document.getElementById('pan-revenue').value) || 0;
-    var kiosks            = parseFloat(document.getElementById('pan-kiosks').value) || 0;
-    var planRate          = parseFloat(document.getElementById('pan-plan').value) || 200;
-    var subsidized        = document.getElementById('pan-subsidized').value;
-    var productCostPct    = (parseFloat(document.getElementById('pan-product-cost-pct').value) || 40) / 100;
-    var productReduction  = (parseFloat(document.getElementById('pan-product-reduction').value) || 3) / 100;
-    var revRecoveryPct    = (parseFloat(document.getElementById('pan-rev-recovery').value) || 2) / 100;
-    var hasCatchall       = document.getElementById('pan-catchall-chk').checked;
-    var transactions      = parseFloat(document.getElementById('pan-transactions').value) || 0;
-    var analysisRev       = parseFloat(document.getElementById('pan-analysis-revenue').value) || 0;
-    var walkouts          = parseFloat(document.getElementById('pan-walkouts').value) || 0;
-    var underring         = parseFloat(document.getElementById('pan-underring').value) || 0;
-    var cancels           = parseFloat(document.getElementById('pan-cancellations').value) || 0;
+    var empty=document.getElementById('p-empty');
+    var out=document.getElementById('p-out');
 
-    var errEl = document.getElementById('pan-err');
-    if(revenue <= 0 || kiosks <= 0){
-      errEl.classList.add('show');
-      return;
+    if(revenue<=0||kiosks<=0){
+      empty.style.display='flex';out.style.display='none';return;
     }
-    errEl.classList.remove('show');
+    empty.style.display='none';out.style.display='flex';
 
-    /* ── STEP 3: THEFT RATE ── */
-    var theftPct = 0.03;
-    if(hasCatchall && transactions > 0 && analysisRev > 0){
-      var totalIncidents = walkouts + underring + cancels;
-      var avgChk = analysisRev / transactions;
-      var theftVal = avgChk * totalIncidents;
-      theftPct = theftVal / analysisRev;
+    var theftPct=trateSlider;
+    if(hasCatch){
+      var txns=parseFloat(document.getElementById('p-txns').value)||0;
+      var arev=parseFloat(document.getElementById('p-arev').value)||0;
+      var wo=parseFloat(document.getElementById('p-wo').value)||0;
+      var ur=parseFloat(document.getElementById('p-ur').value)||0;
+      var ca=parseFloat(document.getElementById('p-ca').value)||0;
+      if(txns>0&&arev>0){
+        var incidents=wo+ur+ca;
+        theftPct=((arev/txns)*incidents)/arev;
+      }
     }
 
-    /* ── PILLAR 1: THEFT REDUCTION ── */
-    var annualTheftLoss = revenue * theftPct;
-    var theftSavings    = annualTheftLoss * (selectedPct / 100);
+    var annualTheftLoss=revenue*theftPct;
+    var theftSavings=annualTheftLoss*theftR;
+    var productSavings=revenue*0.40*pcrPct;
+    var revRecovery=revenue*rrPct;
+    var annualCost=planRate*kiosks*12;
+    var totalImpact=theftSavings+productSavings+revRecovery;
+    var netSavings=totalImpact-annualCost;
+    var roi=annualCost>0?totalImpact/annualCost:0;
 
-    /* ── PILLAR 2: PRODUCT COST REDUCTION (fixed) ── */
-    var productSavings = revenue * productCostPct * productReduction;
+    var mx=Math.max(theftSavings,productSavings,revRecovery,1);
+    ['pb-theft','pb-prod','pb-rev'].forEach(function(id){document.getElementById(id).style.width='0%'});
+    requestAnimationFrame(function(){requestAnimationFrame(function(){
+      document.getElementById('pb-theft').style.width=(theftSavings/mx*100)+'%';
+      document.getElementById('pb-prod').style.width=(productSavings/mx*100)+'%';
+      document.getElementById('pb-rev').style.width=(revRecovery/mx*100)+'%';
+    })});
 
-    /* ── PILLAR 3: REVENUE RECOVERY (fixed) ── */
-    var revRecovery = revenue * revRecoveryPct;
-
-    /* ── STEP 4: PLAN COST ── */
-    var annualCost = planRate * kiosks * 12;
-
-    /* ── STEP 5: TOTAL IMPACT ── */
-    var totalImpact = theftSavings + productSavings + revRecovery;
-
-    /* ── STEP 6: NET SAVINGS ── */
-    var netSavings = totalImpact - annualCost;
-
-    /* ── STEP 7: ROI ── */
-    var roiMultiple = annualCost > 0 ? totalImpact / annualCost : 0;
-
-    /* ── POPULATE ── */
-    var scenarioLabel = selectedPct + '% theft reduction';
-    document.getElementById('pan-roi-pill').textContent       = roiMultiple.toFixed(1)+'x ROI — '+scenarioLabel;
-    document.getElementById('pan-bd-scenario-tag').textContent = scenarioLabel;
-
-    /* Breakdown */
-    var maxBar = Math.max(theftSavings, productSavings, revRecovery, 1);
-    document.getElementById('pan-bd-theft-amt').textContent    = fmt(theftSavings);
-    document.getElementById('pan-bd-product-amt').textContent  = fmt(productSavings);
-    document.getElementById('pan-bd-revenue-amt').textContent  = fmt(revRecovery);
-    document.getElementById('pan-bd-theft-share').textContent  = '('+share(theftSavings, totalImpact)+')';
-    document.getElementById('pan-bd-product-share').textContent= '('+share(productSavings, totalImpact)+')';
-    document.getElementById('pan-bd-revenue-share').textContent= '('+share(revRecovery, totalImpact)+')';
-    document.getElementById('pan-bd-total-val').textContent    = fmt(totalImpact);
-
-    /* KPIs */
-    document.getElementById('pan-k-theft-rate').textContent    = fmtPct(theftPct);
-    document.getElementById('pan-k-theft-loss').textContent    = fmt(annualTheftLoss);
-    document.getElementById('pan-k-total-impact').textContent  = fmt(totalImpact);
-    document.getElementById('pan-k-scenario-sub').textContent  = scenarioLabel;
-    document.getElementById('pan-k-cost').textContent          = fmt(annualCost);
-    document.getElementById('pan-k-cost-sub').textContent      = kiosks+' kiosk'+(kiosks>1?'s':'')+' × $'+planRate+'/mo';
-    document.getElementById('pan-k-roi').textContent           = roiMultiple.toFixed(1)+'x';
-    document.getElementById('pan-k-roi-sub').textContent       = scenarioLabel;
-
-    /* Summary */
-    document.getElementById('pan-sum-impact').textContent = fmt(totalImpact);
-    document.getElementById('pan-sum-cost').textContent   = fmt(annualCost);
-    document.getElementById('pan-sum-net').textContent    = fmt(netSavings);
-    document.getElementById('pan-sum-roi').textContent    = roiMultiple.toFixed(1)+'x';
-    document.getElementById('pan-sum-detail').textContent =
-      'Theft '+fmt(theftSavings)+' · Product '+fmt(productSavings)+' · Recovery '+fmt(revRecovery);
-
-    document.getElementById('pan-sub-note').style.display = subsidized==='yes' ? 'block' : 'none';
-
-    /* Bars — animate */
-    ['pan-bar-theft','pan-bar-product','pan-bar-revenue'].forEach(function(id){
-      document.getElementById(id).style.width = '0%';
-    });
-    setTimeout(function(){
-      document.getElementById('pan-bar-theft').style.width   = (theftSavings/maxBar*100)+'%';
-      document.getElementById('pan-bar-product').style.width = (productSavings/maxBar*100)+'%';
-      document.getElementById('pan-bar-revenue').style.width = (revRecovery/maxBar*100)+'%';
-    }, 60);
-
-    var res = document.getElementById('pan-results');
-    res.classList.add('visible');
-    if(!silent) res.scrollIntoView({ behavior:'smooth', block:'start' });
+    document.getElementById('p-roi').textContent=roi.toFixed(1)+'x';
+    document.getElementById('p-roi-sub').textContent=fmt(totalImpact)+' impact vs '+fmt(annualCost)+' cost';
+    document.getElementById('pa-theft').textContent=fmt(theftSavings);
+    document.getElementById('pa-prod').textContent=fmt(productSavings);
+    document.getElementById('pa-rev').textContent=fmt(revRecovery);
+    document.getElementById('st-trate').textContent=fmtP(theftPct);
+    document.getElementById('st-tloss').textContent=fmt(annualTheftLoss);
+    document.getElementById('st-cost').textContent=fmt(annualCost);
+    document.getElementById('st-cost-sub').textContent=kiosks+' kiosk'+(kiosks>1?'s':'')+' × $'+planRate+'/mo';
+    document.getElementById('st-total').textContent=fmt(totalImpact);
+    document.getElementById('p-net').textContent=fmt(netSavings);
+    document.getElementById('p-subnote').style.display=subsidized?'block':'none';
   };
-
 })();
 </script>
 </body>
