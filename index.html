@@ -295,7 +295,7 @@
           <span class="slider-name">Theft Reduction Scenario</span>
           <span id="sv-theft" class="slider-live">50%</span>
         </div>
-        <input id="p-theft-r" type="range" min="25" max="60" value="50" step="5";pc()">
+        <input id="p-theft-r" type="range" min="25" max="60" value="50" step="5" oninput="psl('p-theft-r','sv-theft','%');pc()">
         <div class="slider-ends"><span>25% Conservative</span><span>60% High Impact</span></div>
       </div>
 
@@ -310,21 +310,25 @@
         <div class="fhint">Industry avg 3–5%. Catchall data overrides this.</div>
       </div>
 
-<!-- Product Cost Reduction -->
-<div class="f">
-  <label class="fl">Product Cost % of Revenue</label>
-  <div class="iw suf">
-    <input id="p-prodcost" type="number" value="40" min="0" max="100" oninput="pc()">
-    <span class="sym r">%</span>
+<!-- Product Cost % of Revenue -->
+<div class="slider-field">
+  <div class="slider-top">
+    <span class="slider-name">Product Cost % of Revenue</span>
+    <span id="sv-prodcost" class="slider-live">40%</span>
   </div>
+  <input id="p-prodcost" type="range" min="25" max="60" value="40" step="1" oninput="psl('p-prodcost','sv-prodcost','%');pc()">
+  <div class="slider-ends"><span>25% Low</span><span>60% High</span></div>
   <div class="fhint">Industry default: 35–45%</div>
 </div>
-<div class="f">
-  <label class="fl">Product Cost Reduction</label>
-  <div class="iw suf">
-    <input id="p-pcr" type="number" value="3" min="0" max="100" oninput="pc()">
-    <span class="sym r">%</span>
+
+<!-- Product Cost Reduction -->
+<div class="slider-field">
+  <div class="slider-top">
+    <span class="slider-name">Product Cost Reduction</span>
+    <span id="sv-pcr" class="slider-live">3%</span>
   </div>
+  <input id="p-pcr" type="range" min="0" max="10" value="3" step="0.5" oninput="psl('p-pcr','sv-pcr','%');pc()">
+  <div class="slider-ends"><span>0%</span><span>10%</span></div>
   <div class="fhint">Typical observed reduction: 4–8%.</div>
 </div>
 
@@ -482,7 +486,7 @@
     el.style.background='linear-gradient(to right,#dc3522 '+pct+'%,#e5e7eb '+pct+'%)';
   };
 
-  ['p-theft-r','p-trate','p-pcr','p-rr'].forEach(function(id){
+  ['p-theft-r','p-trate','p-prodcost','p-pcr','p-rr'].forEach(function(id){
     var el=document.getElementById(id);
     var min=parseFloat(el.min),max=parseFloat(el.max),v=parseFloat(el.value);
     var pct=((v-min)/(max-min))*100;
@@ -500,7 +504,6 @@
     var planRate =parseFloat(document.getElementById('p-plan').value)||200;
     var theftR   =parseFloat(document.getElementById('p-theft-r').value)/100;
     var trateSlider=parseFloat(document.getElementById('p-trate').value)/100;
-    var pcrPct   =parseFloat(document.getElementById('p-pcr').value)/100;
     var rrPct    =parseFloat(document.getElementById('p-rr').value)/100;
     var subsidized=document.getElementById('p-sub').checked;
     var hasCatch =document.getElementById('p-catch-chk').checked;
@@ -528,8 +531,9 @@
 
     var annualTheftLoss=revenue*theftPct;
     var theftSavings=annualTheftLoss*theftR;
-    var prodCostPct=(parseFloat(document.getElementById('p-prodcost').value)||40)/100;
-    var productSavings=revenue*prodCostPct*pcrPct;
+    var prodCostPct=parseFloat(document.getElementById('p-prodcost').value)/100;
+var pcrPct=parseFloat(document.getElementById('p-pcr').value)/100;
+var productSavings=revenue*prodCostPct*pcrPct;
     var revRecovery=revenue*rrPct;
     var annualCost=planRate*kiosks*12;
     var totalImpact=theftSavings+productSavings+revRecovery;
