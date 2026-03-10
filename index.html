@@ -295,7 +295,7 @@
           <span class="slider-name">Theft Reduction Scenario</span>
           <span id="sv-theft" class="slider-live">50%</span>
         </div>
-        <input id="p-theft-r" type="range" min="25" max="60" value="50" step="5" oninput="psl('p-theft-r','sv-theft','%');pc()">
+        <input id="p-theft-r" type="range" min="25" max="60" value="50" step="5";pc()">
         <div class="slider-ends"><span>25% Conservative</span><span>60% High Impact</span></div>
       </div>
 
@@ -310,16 +310,23 @@
         <div class="fhint">Industry avg 3–5%. Catchall data overrides this.</div>
       </div>
 
-      <!-- Product Cost Reduction -->
-      <div class="slider-field">
-        <div class="slider-top">
-          <span class="slider-name">Product Cost Reduction</span>
-          <span id="sv-pcr" class="slider-live">3%</span>
-        </div>
-        <input id="p-pcr" type="range" min="0" max="10" value="3" step="0.5" oninput="psl('p-pcr','sv-pcr','%');pc()">
-        <div class="slider-ends"><span>0%</span><span>10%</span></div>
-        <div class="fhint">Typical: 2–6%.</div>
-      </div>
+<!-- Product Cost Reduction -->
+<div class="f">
+  <label class="fl">Product Cost % of Revenue</label>
+  <div class="iw suf">
+    <input id="p-prodcost" type="number" value="40" min="0" max="100" oninput="pc()">
+    <span class="sym r">%</span>
+  </div>
+  <div class="fhint">Industry default: 35–45%</div>
+</div>
+<div class="f">
+  <label class="fl">Product Cost Reduction</label>
+  <div class="iw suf">
+    <input id="p-pcr" type="number" value="3" min="0" max="100" oninput="pc()">
+    <span class="sym r">%</span>
+  </div>
+  <div class="fhint">Typical observed reduction: 4–8%.</div>
+</div>
 
       <!-- Revenue Recovery -->
       <div class="slider-field">
@@ -521,7 +528,8 @@
 
     var annualTheftLoss=revenue*theftPct;
     var theftSavings=annualTheftLoss*theftR;
-    var productSavings=revenue*0.40*pcrPct;
+    var prodCostPct=(parseFloat(document.getElementById('p-prodcost').value)||40)/100;
+    var productSavings=revenue*prodCostPct*pcrPct;
     var revRecovery=revenue*rrPct;
     var annualCost=planRate*kiosks*12;
     var totalImpact=theftSavings+productSavings+revRecovery;
