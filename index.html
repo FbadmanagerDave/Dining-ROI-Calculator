@@ -28,7 +28,6 @@
   border-bottom:1px solid #f0f0f0;
   position:relative;overflow:hidden;
 }
-/* decorative squares matching panoptyc.com background */
 #pan .hd::before{
   content:'';position:absolute;
   width:90px;height:90px;top:-20px;right:60px;
@@ -287,9 +286,9 @@
       </div>
 
       <div class="dv"></div>
-      <div class="sh"> Key metrics <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:#9ca3af;margin-left:4px">(edit to customise)</span></div>
+      <div class="sh">Key Metrics <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:#9ca3af;margin-left:4px">(edit to customise)</span></div>
 
-      <!-- Theft Reduction Scenario -->
+      <!-- Theft Reduction Scenario slider -->
       <div class="slider-field">
         <div class="slider-top">
           <span class="slider-name">Theft Reduction Scenario</span>
@@ -299,7 +298,7 @@
         <div class="slider-ends"><span>25% Conservative</span><span>60% High Impact</span></div>
       </div>
 
-      <!-- Theft Rate -->
+      <!-- Theft Rate slider -->
       <div class="slider-field">
         <div class="slider-top">
           <span class="slider-name">Theft Rate at Your Site</span>
@@ -310,29 +309,28 @@
         <div class="fhint">Industry avg 3–5%. Catchall data overrides this.</div>
       </div>
 
-<!-- Product Cost % of Revenue -->
-<div class="slider-field">
-  <div class="slider-top">
-    <span class="slider-name">Product Cost % of Revenue</span>
-    <span id="sv-prodcost" class="slider-live">40%</span>
-  </div>
-  <input id="p-prodcost" type="range" min="25" max="60" value="40" step="1" oninput="psl('p-prodcost','sv-prodcost','%');pc()">
-  <div class="slider-ends"><span>25% Low</span><span>60% High</span></div>
-  <div class="fhint">Industry default: 35–45%</div>
-</div>
+      <!-- Product Cost % of Revenue — number input -->
+      <div class="f">
+        <label class="fl">Product Cost % of Revenue</label>
+        <div class="iw suf">
+          <input id="p-prodcost" type="number" value="40" min="0" max="100" oninput="pc()">
+          <span class="sym r">%</span>
+        </div>
+        <div class="fhint">Industry default: 35–45%</div>
+      </div>
 
-<!-- Product Cost Reduction -->
-<div class="slider-field">
-  <div class="slider-top">
-    <span class="slider-name">Product Cost Reduction</span>
-    <span id="sv-pcr" class="slider-live">3%</span>
-  </div>
-  <input id="p-pcr" type="range" min="0" max="10" value="3" step="0.5" oninput="psl('p-pcr','sv-pcr','%');pc()">
-  <div class="slider-ends"><span>0%</span><span>10%</span></div>
-  <div class="fhint">Typical observed reduction: 4–8%.</div>
-</div>
+      <!-- Product Cost Reduction — slider -->
+      <div class="slider-field">
+        <div class="slider-top">
+          <span class="slider-name">Product Cost Reduction</span>
+          <span id="sv-pcr" class="slider-live">3%</span>
+        </div>
+        <input id="p-pcr" type="range" min="0" max="10" value="3" step="0.5" oninput="psl('p-pcr','sv-pcr','%');pc()">
+        <div class="slider-ends"><span>0%</span><span>10%</span></div>
+        <div class="fhint">Typical observed reduction: 4–8%.</div>
+      </div>
 
-      <!-- Revenue Recovery -->
+      <!-- Revenue Recovery slider -->
       <div class="slider-field">
         <div class="slider-top">
           <span class="slider-name">Revenue Recovery</span>
@@ -463,7 +461,7 @@
         </div>
 
         <div id="p-subnote" class="sub-note">
-          <strong>Subsidized site:</strong> Your client is directly funding these losses. Every dollar recovered strengthens the case for your program, and their trust & confidence.
+          <strong>Subsidized site:</strong> Your client is directly funding these losses. Every dollar recovered strengthens the case for your program, and their trust &amp; confidence.
         </div>
 
       </div>
@@ -477,6 +475,7 @@
   function fmt(n){return'$'+Math.round(n).toLocaleString('en-US')}
   function fmtP(n){return(n*100).toFixed(1)+'%'}
 
+  /* update slider track fill + live label */
   window.psl=function(id,lid,suffix){
     var el=document.getElementById(id);
     var v=parseFloat(el.value);
@@ -486,7 +485,8 @@
     el.style.background='linear-gradient(to right,#dc3522 '+pct+'%,#e5e7eb '+pct+'%)';
   };
 
-  ['p-theft-r','p-trate','p-prodcost','p-pcr','p-rr'].forEach(function(id){
+  /* init all range sliders on load */
+  ['p-theft-r','p-trate','p-pcr','p-rr'].forEach(function(id){
     var el=document.getElementById(id);
     var min=parseFloat(el.min),max=parseFloat(el.max),v=parseFloat(el.value);
     var pct=((v-min)/(max-min))*100;
@@ -499,14 +499,16 @@
   };
 
   window.pc=function(){
-    var revenue  =parseFloat(document.getElementById('p-rev').value)||0;
-    var kiosks   =parseFloat(document.getElementById('p-kiosks').value)||0;
-    var planRate =parseFloat(document.getElementById('p-plan').value)||200;
-    var theftR   =parseFloat(document.getElementById('p-theft-r').value)/100;
-    var trateSlider=parseFloat(document.getElementById('p-trate').value)/100;
-    var rrPct    =parseFloat(document.getElementById('p-rr').value)/100;
-    var subsidized=document.getElementById('p-sub').checked;
-    var hasCatch =document.getElementById('p-catch-chk').checked;
+    var revenue    = parseFloat(document.getElementById('p-rev').value)||0;
+    var kiosks     = parseFloat(document.getElementById('p-kiosks').value)||0;
+    var planRate   = parseFloat(document.getElementById('p-plan').value)||200;
+    var theftR     = parseFloat(document.getElementById('p-theft-r').value)/100;
+    var trateSlider= parseFloat(document.getElementById('p-trate').value)/100;
+    var prodCostPct= (parseFloat(document.getElementById('p-prodcost').value)||40)/100;
+    var pcrPct     = parseFloat(document.getElementById('p-pcr').value)/100;
+    var rrPct      = parseFloat(document.getElementById('p-rr').value)/100;
+    var subsidized = document.getElementById('p-sub').checked;
+    var hasCatch   = document.getElementById('p-catch-chk').checked;
 
     var empty=document.getElementById('p-empty');
     var out=document.getElementById('p-out');
@@ -516,6 +518,7 @@
     }
     empty.style.display='none';out.style.display='flex';
 
+    /* ── THEFT RATE: catchall overrides slider ── */
     var theftPct=trateSlider;
     if(hasCatch){
       var txns=parseFloat(document.getElementById('p-txns').value)||0;
@@ -529,17 +532,19 @@
       }
     }
 
-    var annualTheftLoss=revenue*theftPct;
-    var theftSavings=annualTheftLoss*theftR;
-    var prodCostPct=parseFloat(document.getElementById('p-prodcost').value)/100;
-var pcrPct=parseFloat(document.getElementById('p-pcr').value)/100;
-var productSavings=revenue*prodCostPct*pcrPct;
-    var revRecovery=revenue*rrPct;
-    var annualCost=planRate*kiosks*12;
-    var totalImpact=theftSavings+productSavings+revRecovery;
-    var netSavings=totalImpact-annualCost;
-    var roi=annualCost>0?totalImpact/annualCost:0;
+    /* ── PILLARS ── */
+    var annualTheftLoss = revenue * theftPct;
+    var theftSavings    = annualTheftLoss * theftR;
+    var productSavings  = revenue * prodCostPct * pcrPct;
+    var revRecovery     = revenue * rrPct;
 
+    /* ── COST / TOTALS ── */
+    var annualCost  = planRate * kiosks * 12;
+    var totalImpact = theftSavings + productSavings + revRecovery;
+    var netSavings  = totalImpact - annualCost;
+    var roi         = annualCost>0 ? totalImpact/annualCost : 0;
+
+    /* ── BARS ── */
     var mx=Math.max(theftSavings,productSavings,revRecovery,1);
     ['pb-theft','pb-prod','pb-rev'].forEach(function(id){document.getElementById(id).style.width='0%'});
     requestAnimationFrame(function(){requestAnimationFrame(function(){
@@ -548,18 +553,19 @@ var productSavings=revenue*prodCostPct*pcrPct;
       document.getElementById('pb-rev').style.width=(revRecovery/mx*100)+'%';
     })});
 
-    document.getElementById('p-roi').textContent=roi.toFixed(1)+'x';
-    document.getElementById('p-roi-sub').textContent=fmt(totalImpact)+' impact vs '+fmt(annualCost)+' cost';
-    document.getElementById('pa-theft').textContent=fmt(theftSavings);
-    document.getElementById('pa-prod').textContent=fmt(productSavings);
-    document.getElementById('pa-rev').textContent=fmt(revRecovery);
-    document.getElementById('st-trate').textContent=fmtP(theftPct);
-    document.getElementById('st-tloss').textContent=fmt(annualTheftLoss);
-    document.getElementById('st-cost').textContent=fmt(annualCost);
-    document.getElementById('st-cost-sub').textContent=kiosks+' kiosk'+(kiosks>1?'s':'')+' × $'+planRate+'/mo';
-    document.getElementById('st-total').textContent=fmt(totalImpact);
-    document.getElementById('p-net').textContent=fmt(netSavings);
-    document.getElementById('p-subnote').style.display=subsidized?'block':'none';
+    /* ── RENDER ── */
+    document.getElementById('p-roi').textContent     = roi.toFixed(1)+'x';
+    document.getElementById('p-roi-sub').textContent = fmt(totalImpact)+' impact vs '+fmt(annualCost)+' cost';
+    document.getElementById('pa-theft').textContent  = fmt(theftSavings);
+    document.getElementById('pa-prod').textContent   = fmt(productSavings);
+    document.getElementById('pa-rev').textContent    = fmt(revRecovery);
+    document.getElementById('st-trate').textContent  = fmtP(theftPct);
+    document.getElementById('st-tloss').textContent  = fmt(annualTheftLoss);
+    document.getElementById('st-cost').textContent   = fmt(annualCost);
+    document.getElementById('st-cost-sub').textContent = kiosks+' kiosk'+(kiosks>1?'s':'')+' × $'+planRate+'/mo';
+    document.getElementById('st-total').textContent  = fmt(totalImpact);
+    document.getElementById('p-net').textContent     = fmt(netSavings);
+    document.getElementById('p-subnote').style.display = subsidized?'block':'none';
   };
 })();
 </script>
